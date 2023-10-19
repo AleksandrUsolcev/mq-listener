@@ -1,5 +1,6 @@
 import aio_pika
 import aio_pika.abc
+from aio_pika import DeliveryMode
 
 from config import settings
 
@@ -27,7 +28,8 @@ async def publish_message(
     channel: aio_pika.abc.AbstractChannel = await connection.channel()
     await channel.default_exchange.publish(
         aio_pika.Message(
-            body=message.encode()
+            body=message.encode(),
+            delivery_mode=DeliveryMode.PERSISTENT,
         ),
         routing_key=routing_key
     )

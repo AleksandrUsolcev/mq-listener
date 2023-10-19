@@ -30,7 +30,7 @@ async def main(loop):
         channel: aio_pika.abc.AbstractChannel = await connection.channel()
         queue: aio_pika.abc.AbstractQueue = await channel.declare_queue(
             queue_name,
-            auto_delete=True
+            durable=True,
         )
 
         async with queue.iterator() as queue_iter:
