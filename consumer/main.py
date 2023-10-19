@@ -38,7 +38,7 @@ async def main(loop):
                 async with message.process():
                     text = message.body.decode()
                     data = await reverse_text(text)
-                    print(data)
+                    await send_result_to_websocket(data)
                     if queue.name in message.body.decode():
                         break
 
