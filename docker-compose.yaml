@@ -3,11 +3,47 @@ version: '3.8'
 services:
   rabbitmq:
     image: rabbitmq:management
+    restart: always
     ports:
       - 5672:5672
       - 15672:15672
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    env_file:
+      - ./.env
+
+  api:
+    build:
+      context: .
+      args:
+        - SERVICE_NAME=api
+    restart: always
+    ports:
+      - ${API_PORT}:${API_PORT}
+    depends_on:
+      - rabbitmq
+    env_file:
+      - ./.env
+
+  consumer:
+    build:
+      context: .
+      args:
+        - SERVICE_NAME=consumer
+    restart: always
+    depends_on:
+      - rabbitmq
+    env_file:
+      - ./.env
+
+  websocket:
+    build:
+      context: .
+      args:
+        - SERVICE_NAME=ws
+    restart: always
+    ports:
+      - ${WS_PORT}:${WS_PORT}
     env_file:
       - ./.env

@@ -16,8 +16,12 @@ class ConnectionManager:
         await websocket.send_text(message)
 
     async def broadcast(self, message: str):
+        to_remove = []
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)
             except WebSocketDisconnect:
-                self.disconnect(connection)
+                to_remove.append(connection)
+
+        for connection in to_remove:
+            self.disconnect(connection)
