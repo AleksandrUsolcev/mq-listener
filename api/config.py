@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     RABBITMQ_USER: str = 'username'
     RABBITMQ_PASS: str = 'password'
     RABBITMQ_HOST: str = '127.0.0.1'
+    RABBITMQ_QUEUE_NAME: str = 'queue_name'
 
     @property
     def get_amqp_url(self):
