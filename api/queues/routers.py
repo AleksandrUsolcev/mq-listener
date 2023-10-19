@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from queues.publisher import send_message
 from queues.schemas import Content
 
 router = APIRouter(
@@ -8,7 +9,7 @@ router = APIRouter(
 
 
 @router.post('/queue_reverse_text', summary='Текст')
-def post_queue_text(content: Content):
+async def post_queue_text(content: Content):
     """Отправляет текст в очередь rabbitmq."""
-    print(content.text)
+    await send_message(message=content.text, routing_key='simple_queue')
     return {'result': 'Text successfully sent to queue'}
