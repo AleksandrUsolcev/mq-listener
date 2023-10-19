@@ -11,7 +11,7 @@ from config import settings
 
 async def reverse_text(text: str) -> Dict[str, str]:
     reversed_text = text[::-1]
-    return json.dumps({'reversed_text': reversed_text})
+    return json.dumps({'reversed_text': reversed_text}, ensure_ascii=False)
 
 
 async def send_result_to_websocket(data: Dict[str, str]):
