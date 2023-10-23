@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from config import settings
+from internal.config import settings
 from queues.routers import router as router_queues
 
 app = FastAPI()

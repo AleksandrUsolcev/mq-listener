@@ -2,9 +2,11 @@ FROM python:3.11.1-slim
 
 WORKDIR /app
 
-RUN pip install poetry
-
 COPY pyproject.toml poetry.lock ./
+
+COPY ./internal ./internal
+
+RUN pip install poetry
 
 RUN poetry config virtualenvs.create false && poetry install --no-dev
 

@@ -8,7 +8,7 @@ import aio_pika.abc
 import websockets
 from websockets.exceptions import ConnectionClosedError
 
-from config import settings
+from internal.config import settings
 
 logging.basicConfig(
     format='%(asctime)s: %(levelname)s - %(message)s',
