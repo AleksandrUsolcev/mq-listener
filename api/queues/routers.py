@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from config import settings
+from internal.config import settings
 from queues.publisher import send_message
 from queues.schemas import Content
 

@@ -2,7 +2,7 @@ import aio_pika
 import aio_pika.abc
 from aio_pika import DeliveryMode
 
-from config import settings
+from internal.config import settings
 
 
 class BrokerConnectionManager:

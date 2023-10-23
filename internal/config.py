@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     RABBITMQ_HOST: str = '127.0.0.1'
     RABBITMQ_QUEUE_NAME: str = 'queue_name'
 
+    API_HOST: str = '127.0.0.1'
+    API_PORT: int = 8000
+
     WS_HOST: str = '127.0.0.1'
     WS_PORT: int = 8001
 

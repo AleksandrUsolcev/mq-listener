@@ -3,7 +3,7 @@ name = "mq-listener"
 version = "0.1.0"
 description = ""
 authors = ["Aleksandr Usolcev <alexusolev@gmail.com>"]
-readme = "README.md"
+packages = [{ include = "internal" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"

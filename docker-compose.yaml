@@ -19,31 +19,24 @@ services:
 
   api:
     build:
-      context: .
       args:
         - SERVICE_NAME=api
     restart: always
     ports:
       - ${API_PORT}:${API_PORT}
-    depends_on:
-      - rabbitmq
     env_file:
       - ./.env
 
   consumer:
     build:
-      context: .
       args:
         - SERVICE_NAME=consumer
     restart: always
-    depends_on:
-      - rabbitmq
     env_file:
       - ./.env
 
   websocket:
     build:
-      context: .
       args:
         - SERVICE_NAME=ws
     restart: always

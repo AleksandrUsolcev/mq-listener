@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 
-from config import settings
-from wss.routers import router as router_wss
+from internal.config import settings
+from sockets.routers import router as router_sockets
 
 app = FastAPI()
 
 
-app.include_router(router_wss)
+app.include_router(router_sockets)
 
 if __name__ == '__main__':
     import uvicorn
