@@ -32,7 +32,6 @@ async def websocket_connection(queue, url):
 async def consume(loop, amqp_url, ws_url, queue_name):
     connection = await aio_pika.connect_robust(amqp_url, loop=loop)
     async with connection:
-        queue_name = queue_name
         channel: aio_pika.abc.AbstractChannel = await connection.channel()
         queue: aio_pika.abc.AbstractQueue = await channel.declare_queue(
             queue_name,
