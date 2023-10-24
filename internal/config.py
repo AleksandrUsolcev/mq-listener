@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     WS_HOST: str = '127.0.0.1'
     WS_PORT: int = 8001
 
+    CONSUMER_RECONNECT_TIMEOUT: int = 5
+
     @property
     def get_amqp_url(self):
         return (
