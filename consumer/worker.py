@@ -27,7 +27,7 @@ class Worker:
         self.loop = asyncio.get_event_loop()
         self.ws = None
 
-    async def websocket_connection(self):
+    async def _websocket_connection(self):
         while True:
             try:
                 self.ws = await websockets.connect(self.ws_url)
@@ -40,20 +40,20 @@ class Worker:
                 )
                 await asyncio.sleep(self.timeout)
 
-    async def process_message(self, message):
+    async def _process_message(self, message):
+        text = message.body.decode()
+        data = await self.worker_func(text)
+        await self.ws.send(data)
         async with message.process():
-            text = message.body.decode()
-            data = await self.worker_func(text)
-            await self.ws.send(data)
             if self.queue_name in message.body.decode():
                 return True
 
-    async def queue_processing(self, queue):
+    async def _queue_processing(self, queue):
         async with queue.iterator() as queue_iter:
             async for message in queue_iter:
-                await self.process_message(message)
+                await self._process_message(message)
 
-    async def consume(self):
+    async def _consume(self):
         connection = await aio_pika.connect_robust(
             self.amqp_url,
             loop=self.loop
@@ -64,13 +64,13 @@ class Worker:
                 self.queue_name,
                 durable=True,
             )
-            await self.websocket_connection()
-            await self.queue_processing(queue)
+            await self._websocket_connection()
+            await self._queue_processing(queue)
 
     async def run(self):
         while True:
             try:
-                await self.consume()
+                await self._consume()
             except Exception as e:
                 logger.error(e)
                 await asyncio.sleep(self.timeout)
