@@ -8,9 +8,10 @@ COPY ./internal ./internal
 
 RUN pip install poetry
 
-RUN poetry config virtualenvs.create false && poetry install --no-dev
-
 ARG SERVICE_NAME
+RUN poetry config virtualenvs.create false && \
+    poetry install --without dev --with $SERVICE_NAME
+
 COPY ./$SERVICE_NAME ./
 
 CMD ["python", "main.py"]
