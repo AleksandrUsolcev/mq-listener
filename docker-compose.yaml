@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   rabbitmq:
     image: rabbitmq:management
     hostname: rabbitmq
@@ -17,6 +18,31 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
+  redis:
+    image: redis
+    hostname: ${REDIS_HOST}
+    restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    env_file:
+      - ./.env
+    volumes:
+      - redis_data:/data
+
+  api_worker:
+    build:
+      args:
+        - SERVICE_NAME=api
+    restart: always
+    command: > 
+      celery -A workers.celery worker --loglevel=info 
+      --concurrency=${CELERY_CONCURRENCY} 
+      --prefetch-multiplier=${CELERY_PREFETCH_MULTIPLIER}
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
+
   api:
     build:
       args:
@@ -26,6 +52,8 @@ services:
       - ${API_PORT}:${API_PORT}
     env_file:
       - ./.env
+    depends_on:
+      - api_worker
 
   consumer:
     build:
@@ -47,3 +75,4 @@ services:
 
 volumes:
   rabbitmq_data:
+  redis_data:
