@@ -36,12 +36,23 @@ services:
     restart: always
     command: > 
       celery -A workers.celery worker --loglevel=info 
-      --concurrency=${CELERY_CONCURRENCY} 
-      --prefetch-multiplier=${CELERY_PREFETCH_MULTIPLIER}
+      --concurrency=${CELERY_CONCURRENCY}
     env_file:
       - ./.env
     depends_on:
       - redis
+
+  flower:
+    image: mher/flower
+    ports:
+      - ${FLOWER_PORT}:${FLOWER_PORT}
+    environment:
+      CELERY_BROKER_URL: redis://${REDIS_HOST}:${REDIS_PORT}/0
+      CELERY_RESULT_BACKEND: redis://${REDIS_HOST}:${REDIS_PORT}/0
+    env_file:
+      - ./.env
+    depends_on:
+      - api_worker
 
   api:
     build:
